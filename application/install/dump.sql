@@ -225,3 +225,59 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `prefix_user`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+
+--
+-- Структура таблицы `prefix_access_token`
+--
+
+CREATE TABLE `prefix_access_token` (
+  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
+  `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
+  `expiry` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Индексы таблицы `prefix_access_token`
+--
+ALTER TABLE `prefix_access_token`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `client_id` (`client_id`);
+
+--
+-- Структура таблицы `prefix_refresh_token`
+--
+
+CREATE TABLE `prefix_refresh_token` (
+  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `access_token` varchar(500) COLLATE utf8_bin NOT NULL,
+  `expiry` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Индексы таблицы `prefix_refresh_token`
+--
+ALTER TABLE `prefix_refresh_token`
+  ADD PRIMARY KEY (`id`);
+
+
+--
+-- Структура таблицы `prefix_auth_code`
+--
+
+CREATE TABLE `prefix_auth_code` (
+  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
+  `client_id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `expiry` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Индексы таблицы `prefix_auth_code`
+--
+ALTER TABLE `prefix_auth_code`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
