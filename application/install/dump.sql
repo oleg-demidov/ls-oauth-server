@@ -235,7 +235,9 @@ CREATE TABLE `prefix_access_token` (
   `user_id` bigint(20) NOT NULL,
   `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
   `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
-  `expiry` datetime NOT NULL
+  `expiry` datetime NOT NULL,
+  `live` int(11) NOT NULL,
+  `date_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -253,7 +255,8 @@ ALTER TABLE `prefix_access_token`
 CREATE TABLE `prefix_refresh_token` (
   `id` varchar(500) COLLATE utf8_bin NOT NULL,
   `access_token` varchar(500) COLLATE utf8_bin NOT NULL,
-  `expiry` datetime NOT NULL
+  `expiry` datetime NOT NULL,
+    `live` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -272,7 +275,8 @@ CREATE TABLE `prefix_auth_code` (
   `user_id` bigint(20) NOT NULL,
   `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
   `client_id` varchar(500) COLLATE utf8_bin NOT NULL,
-  `expiry` datetime NOT NULL
+  `expiry` datetime NOT NULL,
+  `live` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -281,3 +285,39 @@ CREATE TABLE `prefix_auth_code` (
 ALTER TABLE `prefix_auth_code`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Структура таблицы `prefix_client`
+--
+
+CREATE TABLE `prefix_client` (
+  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `name` varchar(200) COLLATE utf8_bin NOT NULL,
+  `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
+  `secret` VARCHAR(500) NOT NULL,
+  `date_create` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Индексы таблицы `prefix_client`
+--
+ALTER TABLE `prefix_client`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Структура таблицы `prefix_scope`
+--
+
+CREATE TABLE `prefix_scope` (
+  `id` varchar(100) COLLATE utf8_bin NOT NULL,
+  `description` VARCHAR(2000) NULL,
+  `access` ENUM('open','closed','requested') NOT NULL DEFAULT 'open'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+--
+-- Индексы таблицы `prefix_scope`
+--
+ALTER TABLE `prefix_scope`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY (`access`);

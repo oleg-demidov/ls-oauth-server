@@ -6,3 +6,6 @@
 /application/tmp/*
 /uploads/*
 /.idea/
+/nbproject
+/vendor
+
