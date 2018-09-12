@@ -1,14 +1,18 @@
 <?php
 
 
-namespace League\OAuth2\Server\Entities;
+namespace League\OAuth2\Server\Repositories;
+
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ClientEntity;
+use League\OAuth2\Server\Entities\ScopeEntity;
 
 /**
  * Description of Scope
  *
  * @author oleg
  */
-class ScopeRepository implements \League\OAuth2\Server\Repositories\ScopeRepositoryInterface {
+class ScopeRepository implements ScopeRepositoryInterface {
 
     
     public function getScopeEntityByIdentifier($identifier) {

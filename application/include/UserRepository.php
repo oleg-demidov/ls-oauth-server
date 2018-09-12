@@ -1,8 +1,9 @@
 <?php
 
-namespace League\OAuth2\Server\Entities;
+namespace League\OAuth2\Server\Repositories;
 
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\UserEntity;
 
 /**
  * Description of UserRepository
@@ -23,7 +24,10 @@ class UserRepository implements UserRepositoryInterface{
             return false;
         }
         
-        return new UserEntity;
+        $eUser = new UserEntity;
+        $eUser->setIdentifier($oUser->getId());
+        
+        return $eUser;
         
     }
 

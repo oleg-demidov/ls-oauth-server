@@ -5,9 +5,13 @@
  *
  * @author oleg
  */
-namespace League\OAuth2\Server\Entities;
+namespace League\OAuth2\Server\Repositories;
 
-class AccessTokenRepository implements \League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface {
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
+use League\OAuth2\Server\Entities\AccessTokenEntity;
+
+class AccessTokenRepository implements AccessTokenRepositoryInterface {
     
         
     public function getNewToken(ClientEntityInterface $clientEntity, array $aScopes, $userIdentifier = null){

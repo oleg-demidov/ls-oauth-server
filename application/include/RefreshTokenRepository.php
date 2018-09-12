@@ -1,8 +1,9 @@
 <?php
 
-namespace League\OAuth2\Server\Entities;
+namespace League\OAuth2\Server\Repositories;
 
-use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use League\OAuth2\Server\Entities\RefreshTokenEntity;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 /**
  * Description of RefreshTokenRepository
  *

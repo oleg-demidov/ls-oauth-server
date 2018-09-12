@@ -74,6 +74,12 @@ $config['module']['notify']['per_process']   = 10;       // Количество
 $config['module']['notify']['dir']           = 'emails'; // Путь до папки с емэйлами относительно шаблона
 $config['module']['notify']['prefix']        = 'email';  // Префикс шаблонов емэйлов
 
+//Модуль Oauth
+$config['module']['oauth']['auth_code']['expire']   = 'PT10M';    // authorization codes will expire after DateInterval
+$config['module']['oauth']['refresh_token']['expire']   = 'P1M';    // refresh tokens will expire after DateInterval
+$config['module']['oauth']['access_token']['expire']   = 'PT1H';    // Access tokens will expire after DateInterval
+
+
 // Модуль Security
 $config['module']['security']['hash']  = "livestreet_security_key"; // "примесь" к строке, хешируемой в качестве security-кода
 /**
@@ -123,7 +129,8 @@ $config['router']['uri'] = array(
 $config['router']['page']['error']         = 'ActionError';
 $config['router']['page']['index']         = 'ActionIndex';
 $config['router']['page']['ajax']          = 'ActionAjax';
-$config['router']['page']['auth']		   = 'ActionAuth';
+$config['router']['page']['auth']          = 'ActionAuth';
+$config['router']['page']['oauth']          = 'ActionOauth';
 // Глобальные настройки роутинга
 $config['router']['config']['default']['action']	= 'index';
 $config['router']['config']['default']['event']		= null;

@@ -5,9 +5,12 @@
  *
  * @author oleg
  */
-namespace League\OAuth2\Server\Entities;
+namespace League\OAuth2\Server\Repositories;
 
-class ClientRepository implements \League\OAuth2\Server\Repositories\ClientRepositoryInterface {
+use League\OAuth2\Server\Entities\ClientEntity;
+use Engine;
+
+class ClientRepository implements ClientRepositoryInterface {
     
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true) {
         $eClient = new ClientEntity;
