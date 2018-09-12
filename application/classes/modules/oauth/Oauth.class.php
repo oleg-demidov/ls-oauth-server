@@ -7,6 +7,7 @@ use League\OAuth2\Server\Repositories\AuthCodeRepository;
 use League\OAuth2\Server\Repositories\RefreshTokenRepository;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
+use League\OAuth2\Server\Entities\UserEntity;
 
 class ModuleOauth extends ModuleORM
 {
@@ -94,6 +95,15 @@ class ModuleOauth extends ModuleORM
         }
         
         return file_get_contents($sPathEncryptionKey);
+    }
+    
+    public function GetUserEntity($oUser) {
+        $eUser = new UserEntity;
+        
+        $eUser->setIdentifier($oUser->getId());
+        $eUser->setEmail($oUser->getMail());
+        
+        return $eUser;        
     }
 
     
