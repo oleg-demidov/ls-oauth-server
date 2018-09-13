@@ -291,7 +291,7 @@ ALTER TABLE `prefix_auth_code`
 --
 
 CREATE TABLE `prefix_client` (
-  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `id` INT NOT NULL,
   `name` varchar(200) COLLATE utf8_bin NOT NULL,
   `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
   `secret` VARCHAR(500) NOT NULL,

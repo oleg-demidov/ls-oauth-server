@@ -9,25 +9,26 @@
 class ActionOauth_EventClient extends Event {
     
     public function EventApprove() {
-        
         /*
         * Проверяем нет ли уже AuthRequest в сессии
         */
-        if($sAuthRequest = $this->Session_Get('oAuthRequest')){
+        if($sAuthRequest = $this->Session_Get( getRequest('auth_request_key') )){
             $this->oAuthRequest = unserialize($sAuthRequest);
         }
         
-//        if(!$this->oAuthRequest){
-//            return Router::ActionError($this->Lang_Get('oauth.notices.no_auth_request'));
-//        }
-//        
-//        if(!$eClient = $this->oAuthRequest->getClient()){
-//            return Router::ActionError($this->Lang_Get('oauth.notices.no_client'));
-//        }
+        if(!$this->oAuthRequest){
+            return Router::ActionError($this->Lang_Get('oauth.notices.no_auth_request'));
+        }
+        
+        if(!$eClient = $this->oAuthRequest->getClient()){
+            return Router::ActionError($this->Lang_Get('oauth.notices.no_client'));
+        }
         
         $aScopes = $this->oAuthRequest->getScopes();
-        
-        $aScopeIds = json_decode($aScopes);
+        $aScopeIds = [0];
+        foreach ($aScopes as $oScope) {
+            $aScopeIds[] = $oScope->getIdentifier();
+        }
         
         $aScopes = $this->Oauth_GetScopeItemsByFilter([
             'id in' => $aScopeIds,

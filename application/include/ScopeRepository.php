@@ -6,6 +6,7 @@ namespace League\OAuth2\Server\Repositories;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntity;
 use League\OAuth2\Server\Entities\ScopeEntity;
+use Engine;
 
 /**
  * Description of Scope

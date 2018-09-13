@@ -26,6 +26,9 @@ class ClientRepository implements ClientRepositoryInterface {
             return false;
         }
         
+        $eClient->setIdentifier($oClient->getId());
+        $eClient->setRedirectUri($oClient->getRedirectUri());
+        
         /*
          * Проверяем секрет клиента если нужно
          */

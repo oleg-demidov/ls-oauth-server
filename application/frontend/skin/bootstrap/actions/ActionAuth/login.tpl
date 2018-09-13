@@ -9,5 +9,5 @@
 {/block}
 
 {block 'layout_content'}
-    {component 'auth' template='login' showExtra=true redirectUrl=$_aRequest['return-path']}
+    {component 'auth' template='login' showExtra=true redirectUrl=$_aRequest['return_path']}
 {/block}

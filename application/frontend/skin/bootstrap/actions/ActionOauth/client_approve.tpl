@@ -21,6 +21,7 @@
                 </label>
             </div>
         {/foreach}
+        <br>
         <button type="submit" class="btn btn-primary">{lang 'oauth.approve.submit.text'}</button>
     </form>
 {/block}

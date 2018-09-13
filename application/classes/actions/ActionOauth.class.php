@@ -29,7 +29,7 @@ class ActionOauth extends Action
         /*
          * Объявление обязательного интерфейса для oauth сервера
          */
-        $this->oRequest = new Psr\Http\Message\RequestPSR7;
+        $this->oRequest = new Psr\Http\Message\RequestPSR7();
         
     }
 

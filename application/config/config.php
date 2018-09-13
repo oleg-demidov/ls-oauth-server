@@ -117,6 +117,11 @@ $config['db']['table']['user'] = '___db.table.prefix___user';
 $config['db']['table']['user_session'] = '___db.table.prefix___session';
 $config['db']['table']['user_reminder'] = '___db.table.prefix___reminder';
 
+$config['db']['table']['oauth_access_token'] = '___db.table.prefix___access_token';
+$config['db']['table']['oauth_auth_code'] = '___db.table.prefix___auth_code';
+$config['db']['table']['oauth_client'] = '___db.table.prefix___client';
+$config['db']['table']['oauth_scope'] = '___db.table.prefix___scope';
+
 /**
  * Настройки роутинга
  */

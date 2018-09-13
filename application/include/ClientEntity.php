@@ -10,6 +10,12 @@ namespace League\OAuth2\Server\Entities;
 class ClientEntity implements ClientEntityInterface {
     
     use Traits\EntityTrait,  Traits\ClientTrait;
+    
+    
+    public function setRedirectUri($sRedirectUri)
+    {
+        $this->redirectUri = $sRedirectUri;
+    }
 
     
 }
