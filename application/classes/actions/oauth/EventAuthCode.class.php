@@ -101,7 +101,10 @@ class ActionOauth_EventAuthCode extends Event {
                  */
                 Router::Location(Router::GetPath('auth'). '?' . $sQuery);
             }
-            
+            /*
+             * Попытка отправить имеющийся подходящий код
+             */
+            $this->TryResponseAuthCode();
             /*
              * Отправляем на проверку приложения и прав
              */
@@ -129,5 +132,44 @@ class ActionOauth_EventAuthCode extends Event {
             
         }
         
+    }
+    
+    public function TryResponseAuthCode() {
+        $aFilter = [
+            'user_id' => $this->oAuthRequest->getUser()->getIdentifier(),
+            'client_id'=> $this->oAuthRequest->getClient()->getIdentifier()
+        ];
+        
+        $aScopes = $this->oAuthRequest->getScopes();
+        $aScopeStr = [0];
+        foreach ($aScopes as $eScope) {
+            $aScopeStr[] = $eScope->getIdentifier();
+        }
+        /*
+         * Выбираем скоупы с необходимостью подтверждения из тех что запрошены
+         */
+        $aScopes = $this->Oauth_GetScopeItemsByFilter([
+            'requested' => 1,
+            'id in' => $aScopeStr,
+            '#index-from' => 'id'
+        ]);
+        if(count($aScopes)){
+            $aFilter['scopes'] = json_encode(array_keys($aScopes));
+        }
+        /*
+         * Ищем код для приложения и пользователя с подтвержденными скоупами выше
+         */
+        $oAuthCode = $this->Oauth_GetAuthCodeByFilter($aFilter);
+        
+        $oClient = $this->Oauth_GetClientById($this->oAuthRequest->getClient()->getIdentifier());
+        
+        if($oAuthCode and $oClient){
+            /*
+             * Сбрасываем сессию и отправляем код
+             */
+            $this->Session_Drop('oAuthRequest');
+            $this->Session_Drop('state');
+            Router::Location($oClient->getRedirectUri().'?code='.$oAuthCode->getId());
+        }
     }
 }
