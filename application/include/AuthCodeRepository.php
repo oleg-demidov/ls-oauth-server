@@ -15,7 +15,7 @@ use Engine;
 class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
     public function getNewAuthCode() {
-        return new AuthCodeEntity;
+        return Engine::GetEntity('Oauth_AuthCode');
     }
 
     public function isAuthCodeRevoked($codeId) {
@@ -30,23 +30,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
     }
 
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity) {
-        $oDate = $authCodeEntity->getExpiryDateTime();
-        
-        $oAuthCode = Engine::GetEntity('Oauth_AuthCode', [
-            'id'        => $authCodeEntity->getIdentifier(),
-            'expiry'    => $oDate->format("Y-m-d H:i:s"),
-            'live'      => $oDate->getTimestamp() -  (new \DateTime('now'))->getTimestamp(),
-            'user_id'   => $authCodeEntity->getUserIdentifier(),
-            'client_id' => $authCodeEntity->getClient()->getIdentifier(),
-        ]);
-        
-        $aScopes = $authCodeEntity->getScopes();
-        
-        foreach ($aScopes as $eScope) {
-            $oAuthCode->addScope($eScope->getIdentifier());
-        }
-        
-        $oAuthCode->Save();
+        $authCodeEntity->Save();
     }
 
     public function revokeAuthCode($codeId) {
