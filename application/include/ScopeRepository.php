@@ -48,9 +48,7 @@ class ScopeRepository implements ScopeRepositoryInterface {
                 $aEntScopes[$oOpenScope->getId()] = $eScope;
             }
         }
-        
-        //$this->Logger_Notice(print_r($aEntScopes, true));
-         
+                 
         
         return $aEntScopes;
         

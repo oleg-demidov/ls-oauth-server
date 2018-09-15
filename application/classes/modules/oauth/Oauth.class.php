@@ -52,8 +52,12 @@ class ModuleOauth extends ModuleORM
     
     public function EnableGrantType($oServer, $sGrantType) {
         
-        if($sGrantType == 'authorization_code'){
+        if($sGrantType == 'access_token' or $sGrantType == 'authorization_code'){
             $this->EnableGrantTypeAuthCode($oServer);
+        }
+        
+        if($sGrantType == 'refresh_token'){
+            $this->EnableGrantTypeRefreshToken($oServer);
         }
         
     }
@@ -80,6 +84,20 @@ class ModuleOauth extends ModuleORM
             new \DateInterval(Config::Get('module.oauth.access_token.expire')) // access tokens will expire after 
         );
         
+    }
+    
+    public function EnableGrantTypeRefreshToken($oServer) {
+        // Init our repositories
+        $refreshTokenRepository = new RefreshTokenRepository();
+
+        $oGrant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
+        $oGrant->setRefreshTokenTTL(new \DateInterval(Config::Get('module.oauth.refresh_token.expire'))); // new refresh tokens will expire after 1 month
+
+        // Enable the refresh token grant on the server
+        $oServer->enableGrantType(
+            $oGrant,
+            new \DateInterval(Config::Get('module.oauth.access_token.expire')) // new access tokens will expire after an hour
+        );
     }
     
     public function GetPrivateKeyPath() {        

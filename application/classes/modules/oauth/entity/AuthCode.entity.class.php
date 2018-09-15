@@ -52,6 +52,7 @@ class ModuleOauth_EntityAuthCode extends EntityORM implements AuthCodeEntityInte
             $eScope->setIdentifier($identifier);
             $aScopes[] = $eScope;
         }
+        return $aScopes;
     }
 
     public function getUserIdentifier() {

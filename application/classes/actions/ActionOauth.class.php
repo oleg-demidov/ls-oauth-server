@@ -29,7 +29,8 @@ class ActionOauth extends Action
         Router::SetIsShowStats(false);
         /*
          * Объявление обязательного интерфейса для oauth сервера
-         */
+         */        
+        
         $this->oRequest = Request::createFromGlobals($_SERVER);
         
         /*

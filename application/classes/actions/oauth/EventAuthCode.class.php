@@ -1,6 +1,6 @@
 <?php
 
-
+use \League\OAuth2\Server\Exception\OAuthServerException;
 /**
  * Description of EventAuthCode
  *
@@ -104,7 +104,7 @@ class ActionOauth_EventAuthCode extends Event {
             /*
              * Попытка отправить имеющийся подходящий код
              */
-            $this->TryResponseAuthCode();
+            //$this->TryResponseAuthCode();
             /*
              * Отправляем на проверку приложения и прав
              */
@@ -123,12 +123,17 @@ class ActionOauth_EventAuthCode extends Event {
             /*
              * Перенаправление с кодом
              */
-            Router::Location($oResponse->getHeaders()['Location'][0]);
+            $aLocation = $oResponse->getHeader('Location');
+            if(!is_array($aLocation) and !count($aLocation)){
+                throw OAuthServerException::serverError("Unknown error");
+            }
+            
+            Router::Location(array_shift($aLocation));
             
             $this->SetTemplate(false);
 
         }  catch (\Exception $exception) {
-            return Router::ActionError($exception->getMessage());
+            return Router::ActionError($exception->getHint(),$exception->getMessage());
             
         }
         

@@ -10,7 +10,7 @@ class ModuleOauth_EntityAccessToken extends EntityORM
     );
     
     public function addScope($sScope) {
-        if(!is_array($this->_aData['scopes'])){
+        if(!isset($this->_aData['scopes'])){
             $this->_aData['scopes'] = [];
         }
         $this->_aData['scopes'][] = $sScope;

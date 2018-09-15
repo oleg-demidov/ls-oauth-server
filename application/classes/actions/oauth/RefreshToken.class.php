@@ -6,26 +6,28 @@
  *
  * @author oleg
  */
-class ActionOauth_EventToken extends Event {
+class ActionOauth_EventRefreshToken extends Event {
     
     public function Init() {
         
         /*
          * Инициализируем сервер и тип гранта
          */
-        $this->oServer = $this->Oauth_GetServer(getRequest('grant_type',  'authorization_code'));    
+        $this->oServer = $this->Oauth_GetServer(getRequest('grant_type', 'refresh_token'));    
         
         /*
          * Добавляем параметр тип гранта по умолчанию в запрос если нет
          */
-        $this->oRequest = $this->oRequest->withParsedBody(
-            array_merge(
-                $this->oRequest->getParsedBody(),
-                [
-                    'grant_type' => getRequest('grant_type', 'authorization_code')
-                ]
-            )
-        );
+        if(!getRequest('grant_type')){
+            $this->oRequest = $this->oRequest->withParsedBody(
+                array_merge(
+                    $this->oRequest->getParsedBody(),
+                    [
+                        'grant_type' => 'refresh_token'
+                    ]
+                )
+            );
+        }       
        
     }        
     
