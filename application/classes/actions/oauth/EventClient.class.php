@@ -1,6 +1,6 @@
 <?php
 
-
+use League\OAuth2\Server\Entities\ScopeEntity;
 /**
  * Description of EventAuthCode
  *
@@ -32,14 +32,40 @@ class ActionOauth_EventClient extends Event {
         
         $aScopes = $this->Oauth_GetScopeItemsByFilter([
             'id in' => $aScopeIds,
-            'access in' => ['open', 'requested']
+            'requested' => 1
         ]);
         
-        if(!count($aScopes)){
-            return Router::ActionError($this->Lang_Get('oauth.notices.no_scopes'));
-        }
+        $oClient = $this->Oauth_GetClientByFilter([
+            'id' => $eClient->getIdentifier(),
+        ]);
+        
+        if(isPost()){
+            /*
+             * Подтверждение приложения
+             */
+            if(getRequest('approve')){
+                $this->oAuthRequest->setAuthorizationApproved(true);
+            }
+            /*
+             * Подтвержденные скоупы
+             */
+            $aScopes = [];
+            foreach (getRequest('scopes', []) as $sScope => $bApprove) {
+                if(!$bApprove){
+                    continue;
+                }
+                $eScope = new ScopeEntity;
+                $eScope->setIdentifier($sScope);
+                $aScopes[] = $eScope;
+            }
+            $this->oAuthRequest->setScopes($aScopes);
+            
+            $this->Session_Set( getRequest('auth_request_key'), serialize($this->oAuthRequest) );
+            Router::Location( urldecode(getRequest('return_path')) );
+        }        
         
         $this->Viewer_Assign('sAppDefImage', $this->Component_GetWebPath('app').'/image/app100.png');
+        $this->Viewer_Assign('oClient', $oClient);
         $this->Viewer_Assign('aScopes', $aScopes);
         
     }

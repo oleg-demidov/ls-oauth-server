@@ -5,6 +5,7 @@ namespace League\OAuth2\Server\Repositories;
 
 use League\OAuth2\Server\Entities\AuthCodeEntity;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
+use Engine;
 
 /**
  * Description of AuthCodeRepository
@@ -34,7 +35,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
         $oAuthCode = Engine::GetEntity('Oauth_AuthCode', [
             'id'        => $authCodeEntity->getIdentifier(),
             'expiry'    => $oDate->format("Y-m-d H:i:s"),
-            'live'      => $oDate->diff( new \DateTime)->format("%s"),
+            'live'      => $oDate->getTimestamp() -  (new \DateTime('now'))->getTimestamp(),
             'user_id'   => $authCodeEntity->getUserIdentifier(),
             'client_id' => $authCodeEntity->getClient()->getIdentifier(),
         ]);
@@ -42,7 +43,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
         $aScopes = $authCodeEntity->getScopes();
         
         foreach ($aScopes as $eScope) {
-            $oAuthCode->addScope(json_encode($eScope));
+            $oAuthCode->addScope($eScope->getIdentifier());
         }
         
         $oAuthCode->Save();

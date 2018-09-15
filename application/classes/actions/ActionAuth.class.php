@@ -184,6 +184,7 @@ class ActionAuth extends Action
             Router::LocationAction('/');
         }
         $this->Viewer_AddHtmlTitle($this->Lang_Get('auth.login.title'));
+        $this->Viewer_Assign('redirectUrl', urldecode(getRequest('return_path')));
     }
 
     /**

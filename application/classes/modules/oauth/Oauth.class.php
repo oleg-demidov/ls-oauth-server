@@ -106,5 +106,9 @@ class ModuleOauth extends ModuleORM
         return $eUser;        
     }
 
+    public function GenerateState($iClientId, $sScopes = '') {
+        $sKey = $iClientId . $sScopes . (new DateTime)->format('Y-m-d H:i:s');
+        return md5($sKey);
+    }
     
 }

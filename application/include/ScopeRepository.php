@@ -38,8 +38,8 @@ class ScopeRepository implements ScopeRepositoryInterface {
          * Можно убрать или добавить закрытые или открытые области
          */
         $aOpenScopes = Engine::getInstance()->Oauth_GetScopeItemsByFilter([
-            'access'        => 'open'
-        ]);        
+            'requested'        => 0
+        ]);
         
         foreach ($aOpenScopes as $oOpenScope) {
             if(!isset($aEntScopes[$oOpenScope->getId()])){
@@ -49,18 +49,8 @@ class ScopeRepository implements ScopeRepositoryInterface {
             }
         }
         
-        /*
-         * Убираем запрещенные скоупы
-         */
-        $aClosedScopes = Engine::getInstance()->Oauth_GetScopeItemsByFilter([
-            'access'        => 'closed'
-        ]); 
-        
-        foreach ($aClosedScopes as $oClosedScope) {
-            if(isset($aEntScopes[$oOpenScope->getId()])){
-                unset($aEntScopes[$oOpenScope->getId()]);
-            }
-        }  
+        //$this->Logger_Notice(print_r($aEntScopes, true));
+         
         
         return $aEntScopes;
         

@@ -4,7 +4,7 @@
  * @param string $redirectUrl
  *}
 
-{component_define_params params=[ 'modal', 'redirectUrl' ]}
+{component_define_params params=[ 'modal' ]}
 
 {hook run='login_begin'}
 
@@ -33,7 +33,7 @@
     {hook run='form_login_end'}
 
     {if !$redirectUrl}
-        {$redirectUrl = $smarty.local.redirectUrl|default:$PATH_WEB_CURRENT}
+        {$redirectUrl = $smarty.request.return_path|default:$PATH_WEB_CURRENT}
     {/if}
     {component 'field' template='hidden' name='return-path' value=$redirectUrl}
 

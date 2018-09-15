@@ -1,5 +1,6 @@
 <?php
 
+use \Slim\Http\Request;
 /**
  * Обрабатывает авторизацию
  *
@@ -29,7 +30,17 @@ class ActionOauth extends Action
         /*
          * Объявление обязательного интерфейса для oauth сервера
          */
-        $this->oRequest = new Psr\Http\Message\RequestPSR7();
+        $this->oRequest = Request::createFromGlobals($_SERVER);
+        
+        /*
+         * Удалить все устаревшие коды
+         */
+        $this->Oauth_DeleteAuthCodeItemsByFilter([
+            '#where' => [
+                't.expiry < ?' => [(new \DateTime('now'))->format("Y-m-d H:i:s")]
+            ]
+            
+        ]);
         
     }
 
@@ -43,7 +54,9 @@ class ActionOauth extends Action
         
         $this->RegisterEventExternal("Client", "ActionOauth_EventClient");
         $this->AddEvent('client_approve', 'Client::EventApprove');
-
+        
+        $this->RegisterEventExternal("Token", "ActionOauth_EventToken");
+        $this->AddEvent('access_token',  'Token::EventGet');
         
     }
 

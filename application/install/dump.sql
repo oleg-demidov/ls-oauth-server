@@ -293,6 +293,7 @@ ALTER TABLE `prefix_auth_code`
 CREATE TABLE `prefix_client` (
   `id` INT NOT NULL,
   `name` varchar(200) COLLATE utf8_bin NOT NULL,
+    `description` VARCHAR(1000) NULL,
   `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
   `secret` VARCHAR(500) NOT NULL,
   `date_create` datetime NOT NULL
@@ -311,7 +312,7 @@ ALTER TABLE `prefix_client`
 CREATE TABLE `prefix_scope` (
   `id` varchar(100) COLLATE utf8_bin NOT NULL,
   `description` VARCHAR(2000) NULL,
-  `access` ENUM('open','closed','requested') NOT NULL DEFAULT 'open'
+  `requested` TINYINT NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
