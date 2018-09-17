@@ -291,7 +291,7 @@ ALTER TABLE `prefix_auth_code`
 --
 
 CREATE TABLE `prefix_client` (
-  `id` INT NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) COLLATE utf8_bin NOT NULL,
     `description` VARCHAR(1000) NULL,
   `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
@@ -321,4 +321,4 @@ CREATE TABLE `prefix_scope` (
 --
 ALTER TABLE `prefix_scope`
   ADD PRIMARY KEY (`id`),
-  ADD KEY (`access`);
+  ADD KEY (`requested`);

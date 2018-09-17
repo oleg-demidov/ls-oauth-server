@@ -33,8 +33,13 @@ class ActionOauth_EventToken extends Event {
 
         try {
             $oResponse = $this->oServer->respondToAccessTokenRequest($this->oRequest, new \Slim\Http\Response());
-            
-            print_r((string)$oResponse->getBody());
+            /*
+             * Добавить в ответ mail
+             */
+            $aBoby = json_decode( (string)$oResponse->getBody() );
+            $oUser = $this->User_GetUserById($aBoby['user_id']);
+            $aBoby['user_mail'] = $oUser->getMail();
+            print_r(json_encode($aBoby));
             
             $this->SetTemplate(false);
 
