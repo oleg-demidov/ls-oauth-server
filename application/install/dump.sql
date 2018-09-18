@@ -328,5 +328,5 @@ CREATE TABLE `prefix_scope` (
 --
 ALTER TABLE `prefix_scope`
   ADD PRIMARY KEY (`id`),
-  UNIQUE(`identifier`),
-  ADD KEY (`access`);
+  ADD KEY (`access`),
+  ADD KEY (`requested`);
