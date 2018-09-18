@@ -231,7 +231,8 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 --
 
 CREATE TABLE `prefix_access_token` (
-  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `token` varchar(500) COLLATE utf8_bin NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
   `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
@@ -245,6 +246,7 @@ CREATE TABLE `prefix_access_token` (
 --
 ALTER TABLE `prefix_access_token`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `token` (`user_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `client_id` (`client_id`);
 
@@ -253,7 +255,8 @@ ALTER TABLE `prefix_access_token`
 --
 
 CREATE TABLE `prefix_refresh_token` (
-  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `token` VARCHAR(500) COLLATE utf8_bin NOT NULL,
   `access_token` varchar(500) COLLATE utf8_bin NOT NULL,
   `expiry` datetime NOT NULL,
     `live` int(11) NOT NULL
@@ -263,6 +266,7 @@ CREATE TABLE `prefix_refresh_token` (
 -- Индексы таблицы `prefix_refresh_token`
 --
 ALTER TABLE `prefix_refresh_token`
+  ADD KEY (`token`)
   ADD PRIMARY KEY (`id`);
 
 
@@ -271,7 +275,8 @@ ALTER TABLE `prefix_refresh_token`
 --
 
 CREATE TABLE `prefix_auth_code` (
-  `id` varchar(500) COLLATE utf8_bin NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(500) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
   `client_id` varchar(500) COLLATE utf8_bin NOT NULL,
@@ -283,6 +288,7 @@ CREATE TABLE `prefix_auth_code` (
 -- Индексы таблицы `prefix_auth_code`
 --
 ALTER TABLE `prefix_auth_code`
+  ADD KEY (`code`)
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
@@ -291,9 +297,9 @@ ALTER TABLE `prefix_auth_code`
 --
 
 CREATE TABLE `prefix_client` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(200) COLLATE utf8_bin NOT NULL,
-    `description` VARCHAR(1000) NULL,
+  `description` VARCHAR(1000) NULL,
   `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
   `secret` VARCHAR(500) NOT NULL,
   `date_create` datetime NOT NULL
@@ -310,7 +316,8 @@ ALTER TABLE `prefix_client`
 --
 
 CREATE TABLE `prefix_scope` (
-  `id` varchar(100) COLLATE utf8_bin NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(100) COLLATE utf8_bin NOT NULL,
   `description` VARCHAR(2000) NULL,
   `requested` TINYINT NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -321,4 +328,5 @@ CREATE TABLE `prefix_scope` (
 --
 ALTER TABLE `prefix_scope`
   ADD PRIMARY KEY (`id`),
+  UNIQUE(`identifier`),
   ADD KEY (`access`);

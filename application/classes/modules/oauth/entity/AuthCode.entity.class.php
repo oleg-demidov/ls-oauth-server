@@ -38,7 +38,7 @@ class ModuleOauth_EntityAuthCode extends EntityORM implements AuthCodeEntityInte
     }
 
     public function getIdentifier(){
-        return parent::getId();
+        return parent::getCode();
     }
 
     public function getRedirectUri() {
@@ -47,8 +47,13 @@ class ModuleOauth_EntityAuthCode extends EntityORM implements AuthCodeEntityInte
 
     public function getScopes(){
         $aScopes = [];
+        
+        if(!is_array(parent::getScopes())){
+            return $aScopes;
+        }
+        
         foreach (parent::getScopes() as $identifier) {
-            $eScope = new League\OAuth2\Server\Entities\ScopeEntity();
+            $eScope = Engine::GetEntity('Oauth_Scope');
             $eScope->setIdentifier($identifier);
             $aScopes[] = $eScope;
         }
@@ -70,7 +75,7 @@ class ModuleOauth_EntityAuthCode extends EntityORM implements AuthCodeEntityInte
     }
 
     public function setIdentifier($identifier) {
-        parent::setId($identifier);
+        parent::setCode($identifier);
     }
 
     public function setRedirectUri($uri) {

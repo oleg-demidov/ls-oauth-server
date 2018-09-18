@@ -20,7 +20,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
     public function isAuthCodeRevoked($codeId) {
         $oAuthCode = Engine::getInstance()->Oauth_GetAuthCodeByFilter([
-            'id' => $codeId
+            'code' => $codeId
         ]);
         
         if(!$oAuthCode){
@@ -35,7 +35,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
     public function revokeAuthCode($codeId) {
         $oAuthCode = Engine::getInstance()->Oauth_GetAuthCodeByFilter([
-            'id' => $codeId
+            'code' => $codeId
         ]);
         
         $oAuthCode->Delete();

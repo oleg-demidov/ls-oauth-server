@@ -13,8 +13,6 @@ use Engine;
 class ClientRepository implements ClientRepositoryInterface {
     
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true) {
-        $eClient = new ClientEntity;
-        
         /*
          * Проверяем на существование клиента (приложение)
          */
@@ -24,10 +22,7 @@ class ClientRepository implements ClientRepositoryInterface {
 
         if(!$oClient){
             return false;
-        }
-        
-        $eClient->setIdentifier($oClient->getId());
-        $eClient->setRedirectUri($oClient->getRedirectUri());
+        }        
         
         /*
          * Проверяем секрет клиента если нужно
@@ -39,7 +34,7 @@ class ClientRepository implements ClientRepositoryInterface {
             }
         }
         
-        return $eClient;
+        return $oClient;
     }
 
 }

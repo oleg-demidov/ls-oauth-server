@@ -1,11 +1,13 @@
 <?php
+
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 /**
  * Сущность приложения
  *
  * @package modules.user
  * @since 1.0
  */
-class ModuleOauth_EntityClient extends EntityORM
+class ModuleOauth_EntityClient extends EntityORM implements ClientEntityInterface
 {
 
     protected $aRelations = array(
@@ -13,4 +15,16 @@ class ModuleOauth_EntityClient extends EntityORM
     );
 
     
+    public function getIdentifier() {
+        return (string)parent::getId();
+    }
+
+    public function getName() {
+        return parent::getName();
+    }
+
+    public function getRedirectUri() {
+        return parent::getRedirectUri();
+    }
+
 }

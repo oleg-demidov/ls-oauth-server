@@ -18,7 +18,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
 
     public function isRefreshTokenRevoked($tokenId) {
         $oRefreshToken = Engine::getInstance()->Oauth_GetRefreshTokenByFilter([
-            'id' => $tokenId
+            'token' => $tokenId
         ]);
         
         if(!$oRefreshToken){
@@ -33,7 +33,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
 
     public function revokeRefreshToken($tokenId) {
         $oRefreshToken = Engine::getInstance()->Oauth_GetRefreshTokenByFilter([
-            'id' => $tokenId
+            'token' => $tokenId
         ]);
         
         $oRefreshToken->Delete();

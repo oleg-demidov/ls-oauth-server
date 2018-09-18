@@ -19,7 +19,7 @@ class ModuleOauth_EntityRefreshToken extends EntityORM implements RefreshTokenEn
     }
 
     public function getIdentifier(){
-        return parent::getId();
+        return parent::getToken();
     }
 
     public function setAccessToken(AccessTokenEntityInterface $accessToken) {
@@ -33,7 +33,7 @@ class ModuleOauth_EntityRefreshToken extends EntityORM implements RefreshTokenEn
     }
 
     public function setIdentifier($identifier) {
-        parent::setId($identifier);
+        parent::setToken($identifier);
     }
 
 }

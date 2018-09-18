@@ -25,15 +25,14 @@ class ActionOauth_EventClient extends Event {
         }
         
         $aScopes = $this->oAuthRequest->getScopes();
-        $aScopeIds = [0];
+        $aScopeRequested = [];
         foreach ($aScopes as $oScope) {
-            $aScopeIds[] = $oScope->getIdentifier();
+            if($oScope->getRequested()){
+                $aScopeRequested[] = $oScope;
+            }
         }
         
-        $aScopes = $this->Oauth_GetScopeItemsByFilter([
-            'id in' => $aScopeIds,
-            'requested' => 1
-        ]);
+        
         
         $oClient = $this->Oauth_GetClientByFilter([
             'id' => $eClient->getIdentifier(),
@@ -49,16 +48,17 @@ class ActionOauth_EventClient extends Event {
             /*
              * Подтвержденные скоупы
              */
-            $aScopes = [];
-            foreach (getRequest('scopes', []) as $sScope => $bApprove) {
+            $aScopeIds = [0];
+            foreach (getRequest('scopes', []) as $iScopeId => $bApprove) {
                 if(!$bApprove){
                     continue;
                 }
-                $eScope = new ScopeEntity;
-                $eScope->setIdentifier($sScope);
-                $aScopes[] = $eScope;
+                $aScopeIds[] = $iScopeId;
             }
-            $this->oAuthRequest->setScopes($aScopes);
+            $aScopesApprove = $this->Oauth_GetScopeItemsByFilter([
+                'id in' => $aScopeIds,
+            ]);
+            $this->oAuthRequest->setScopes($aScopesApprove);
             
             $this->Session_Set( getRequest('auth_request_key'), serialize($this->oAuthRequest) );
             Router::Location( urldecode(getRequest('return_path')) );
@@ -66,7 +66,7 @@ class ActionOauth_EventClient extends Event {
         
         $this->Viewer_Assign('sAppDefImage', $this->Component_GetWebPath('app').'/image/app100.png');
         $this->Viewer_Assign('oClient', $oClient);
-        $this->Viewer_Assign('aScopes', $aScopes);
+        $this->Viewer_Assign('aScopes', $aScopeRequested);
         
     }
 }

@@ -1,7 +1,7 @@
 {
     "require": {
-        "league/oauth2-server": "^7.2",
         "slim/http": "^0.3",
-        "paragonie/random_compat": "<9.99"
+        "paragonie/random_compat": "<9.99",
+        "league/oauth2-server": "^6.1.1"
     }
 }

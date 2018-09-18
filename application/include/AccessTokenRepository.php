@@ -17,15 +17,13 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
         
     public function getNewToken(ClientEntityInterface $clientEntity, array $aScopes, $userIdentifier = null){
         
-        $eAccessToken = new AccessTokenEntity;        
-        
-        return $eAccessToken;
+        return \Engine::GetEntity("Oauth_AccessToken");
         
     }
 
     public function isAccessTokenRevoked($tokenId) {
         $oAccessToken = Engine::getInstance()->Oauth_GetAccessTokenByFilter([
-            'id' => $tokenId
+            'token' => $tokenId
         ]);
         
         if(!$oAccessToken){
@@ -34,23 +32,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
         return false;
     }
 
-    public function persistNewAccessToken(AccessTokenEntityInterface $eAccessToken) {
-        
-        $oDate = $eAccessToken->getExpiryDateTime();
-        
-        $oAccessToken = Engine::GetEntity('Oauth_AccessToken', [
-            'id'        => $eAccessToken->getIdentifier(),
-            'expiry'    => $oDate->format("Y-m-d H:i:s"),
-            'live'      => $oDate->diff( new \DateTime)->format("%s"),
-            'user_id'   => $eAccessToken->getUserIdentifier(),
-            'client_id' => $eAccessToken->getClient()->getIdentifier(),
-        ]);
-        
-        $aScopes = $eAccessToken->getScopes();
-        
-        foreach ($aScopes as $eScope) {
-            $oAccessToken->addScope(json_encode($eScope));
-        }
+    public function persistNewAccessToken(AccessTokenEntityInterface $oAccessToken) {
         
         $oAccessToken->Save();
         
@@ -58,7 +40,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
 
     public function revokeAccessToken($tokenId) {
         $oAccessToken = Engine::getInstance()->Oauth_GetAccessTokenByFilter([
-            'id' => $tokenId
+            'token' => $tokenId
         ]);
         
         $oAccessToken->Delete();

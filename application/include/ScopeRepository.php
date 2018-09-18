@@ -18,21 +18,14 @@ class ScopeRepository implements ScopeRepositoryInterface {
     
     public function getScopeEntityByIdentifier($identifier) {
         
-        $oScope = Engine::getInstance()->Oauth_GetScopeById($identifier);
+        $oScope = Engine::getInstance()->Oauth_GetScopeByIdentifier($identifier);
         
-        if(!$oScope){
-            return false;
-        }
-        
-        $eScope = new ScopeEntity();
-        $eScope->setIdentifier($identifier);
-        
-        return $eScope;
+        return $oScope;
     }
     
     
     
-    public function finalizeScopes(array $aEntScopes, $grantType, ClientEntityInterface $clientEntity, $userIdentifier = null){
+    public function finalizeScopes(array $aScopes, $grantType, ClientEntityInterface $clientEntity, $userIdentifier = null){
         /*
          * В этом методе подготавливаются области доступа перед передачей токена или кода
          * Можно убрать или добавить закрытые или открытые области
@@ -42,15 +35,13 @@ class ScopeRepository implements ScopeRepositoryInterface {
         ]);
         
         foreach ($aOpenScopes as $oOpenScope) {
-            if(!isset($aEntScopes[$oOpenScope->getId()])){
-                $eScope = new ScopeEntity();
-                $eScope->setIdentifier($oOpenScope->getId());
-                $aEntScopes[$oOpenScope->getId()] = $eScope;
+            if(!isset($aScopes[$oOpenScope->getIdentifier()])){
+                $aScopes[$oOpenScope->getIdentifier()] = $oOpenScope;
             }
         }
                  
         
-        return $aEntScopes;
+        return $aScopes;
         
     } 
 }
