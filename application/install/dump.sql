@@ -238,14 +238,14 @@ CREATE TABLE `prefix_access_token` (
   `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
   `expiry` datetime NOT NULL,
   `live` int(11) NOT NULL,
-  `date_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Индексы таблицы `prefix_access_token`
 --
 ALTER TABLE `prefix_access_token`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `token` (`user_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `client_id` (`client_id`);
@@ -259,15 +259,15 @@ CREATE TABLE `prefix_refresh_token` (
   `token` VARCHAR(500) COLLATE utf8_bin NOT NULL,
   `access_token` varchar(500) COLLATE utf8_bin NOT NULL,
   `expiry` datetime NOT NULL,
-    `live` int(11) NOT NULL
+   `live` int(11) NOT NULL,
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Индексы таблицы `prefix_refresh_token`
 --
 ALTER TABLE `prefix_refresh_token`
-  ADD KEY (`token`)
-  ADD PRIMARY KEY (`id`);
+  ADD KEY (`token`);
 
 
 --
@@ -281,15 +281,15 @@ CREATE TABLE `prefix_auth_code` (
   `scopes` varchar(500) COLLATE utf8_bin NOT NULL,
   `client_id` varchar(500) COLLATE utf8_bin NOT NULL,
   `expiry` datetime NOT NULL,
-  `live` INT NOT NULL
+  `live` INT NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Индексы таблицы `prefix_auth_code`
 --
 ALTER TABLE `prefix_auth_code`
-  ADD KEY (`code`)
-  ADD PRIMARY KEY (`id`),
+  ADD KEY (`code`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -302,14 +302,10 @@ CREATE TABLE `prefix_client` (
   `description` VARCHAR(1000) NULL,
   `redirect_uri` varchar(500) COLLATE utf8_bin DEFAULT NULL,
   `secret` VARCHAR(500) NOT NULL,
-  `date_create` datetime NOT NULL
+  `date_create` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Индексы таблицы `prefix_client`
---
-ALTER TABLE `prefix_client`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Структура таблицы `prefix_scope`
@@ -319,7 +315,8 @@ CREATE TABLE `prefix_scope` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `identifier` varchar(100) COLLATE utf8_bin NOT NULL,
   `description` VARCHAR(2000) NULL,
-  `requested` TINYINT NOT NULL DEFAULT 1
+  `requested` TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
@@ -327,6 +324,4 @@ CREATE TABLE `prefix_scope` (
 -- Индексы таблицы `prefix_scope`
 --
 ALTER TABLE `prefix_scope`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY (`access`),
   ADD KEY (`requested`);
