@@ -26,8 +26,6 @@ class ActionOauth_EventToken extends Event {
                 ]
             )
         );
-        $this->Logger_Debug('Start Token');
-        $this->Logger_Debug('Request params give:'.json_encode($this->oRequest->getParsedBody()));
     }        
     
     public function EventGet() {
@@ -38,9 +36,7 @@ class ActionOauth_EventToken extends Event {
             /*
              * Добавить в ответ mail
              */
-            $this->Logger_Debug('GetBody token:'. print_r($oResponse->getBody()->getContents(), true));
             $oBoby = json_decode( $oResponse->getBody() );
-            $this->Logger_Debug('GetBody token:'. print_r($oBoby, true));
             
             if(is_object($oBoby) and property_exists($oBoby,'user_id')){
                 $oUser = $this->User_GetUserById($oBoby->user_id);
