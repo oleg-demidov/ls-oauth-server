@@ -21,6 +21,6 @@
         <br>
         {component 'field.hidden' name="approve" value=1}
         {component 'button' text={lang 'oauth.approve.submit.text'} mods="primary"}
-        {component 'button' text={lang 'common.cancel'} url={$oClient->getRedirectUri()} }
+        {component 'button' text={lang 'common.cancel'} url={$sCancelUri} }
     </form>
 {/block}

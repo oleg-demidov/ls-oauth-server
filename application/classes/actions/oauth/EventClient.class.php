@@ -40,9 +40,11 @@ class ActionOauth_EventClient extends Event {
         
         if(isPost()){
             /*
-             * Подтверждение приложения
+             * Если не подтверждено
              */
-            if(getRequest('approve')){
+            if(!getRequest('approve')){
+                Router::Location( $this->oAuthRequest->getRedirectUri() );
+            }else{
                 $this->oAuthRequest->setAuthorizationApproved(true);
             }
             /*
@@ -57,8 +59,11 @@ class ActionOauth_EventClient extends Event {
             }
             $aScopesApprove = $this->Oauth_GetScopeItemsByFilter([
                 'id in' => $aScopeIds,
+                '#where' => [
+                    '1=1 or t.requested = ?d' => [0]
+                ]
             ]);
-            $this->oAuthRequest->setScopes($aScopesApprove);
+            $this->oAuthRequest->setScopes($aScopesApprove);            
             
             $this->Session_Set( getRequest('auth_request_key'), serialize($this->oAuthRequest) );
             Router::Location( urldecode(getRequest('return_path')) );
@@ -66,6 +71,7 @@ class ActionOauth_EventClient extends Event {
         
         $this->Viewer_Assign('sAppDefImage', $this->Component_GetWebPath('app').'/image/app100.png');
         $this->Viewer_Assign('oClient', $oClient);
+        $this->Viewer_Assign('sCancelUri', Router::GetPath('oauth/authorization_cancel'));
         $this->Viewer_Assign('aScopes', $aScopeRequested);
         
     }

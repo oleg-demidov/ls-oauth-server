@@ -65,6 +65,7 @@ class ActionIndex extends Action
          * Устанавливаем шаблон вывода
          */
         $this->SetTemplateAction('index');
+        $this->Viewer_Assign('phpv', phpversion());
     }
 
     /**

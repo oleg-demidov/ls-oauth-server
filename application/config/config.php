@@ -75,9 +75,10 @@ $config['module']['notify']['dir']           = 'emails'; // Путь до пап
 $config['module']['notify']['prefix']        = 'email';  // Префикс шаблонов емэйлов
 
 //Модуль Oauth
-$config['module']['oauth']['auth_code']['expire']   = 'PT10M';    // authorization codes will expire after DateInterval
+$config['module']['oauth']['auth_code']['expire']   = 'PT10H';    // authorization codes will expire after DateInterval
 $config['module']['oauth']['refresh_token']['expire']   = 'P1M';    // refresh tokens will expire after DateInterval
 $config['module']['oauth']['access_token']['expire']   = 'PT1H';    // Access tokens will expire after DateInterval
+$config['module']['oauth']['fast_auth_code']  = false;          //Быстрое восстановление кода
 
 
 // Модуль Security

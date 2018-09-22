@@ -14,6 +14,8 @@ class ActionOauth extends Action
     public $oRequest;
     
     public $oAuthRequest;
+    
+    public $sAuthRequestKey = 'oAuthRequest';
     /**
      * Инициализация
      */
@@ -53,12 +55,24 @@ class ActionOauth extends Action
         $this->RegisterEventExternal("AuthCode", "ActionOauth_EventAuthCode");        
         $this->AddEvent('authorization_code', 'AuthCode::EventAuth');
         
+        $this->AddEvent('authorization_cancel', 'EventCancel');
+        
         $this->RegisterEventExternal("Client", "ActionOauth_EventClient");
         $this->AddEvent('client_approve', 'Client::EventApprove');
         
         $this->RegisterEventExternal("Token", "ActionOauth_EventToken");
         $this->AddEvent('access_token',  'Token::EventGet');
         
+    }
+    
+    public function EventCancel() {
+        if($sAuthRequest = $this->Session_Get($this->sAuthRequestKey)){
+            $this->oAuthRequest = unserialize($sAuthRequest);
+            $this->Session_Drop('oAuthRequest');
+            $this->Session_Drop('state');
+            Router::Location($this->oAuthRequest->getRedirectUri());
+        }
+        return Router::ActioError("No client find");
     }
 
 

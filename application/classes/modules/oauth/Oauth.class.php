@@ -42,7 +42,8 @@ class ModuleOauth extends ModuleORM
             $accessTokenRepository,
             $scopeRepository,
             $privateKey,
-            $encryptionKey
+            $encryptionKey,
+            new ResponseToken()
         );
         
         $this->EnableGrantType($oServer, $sGrantType);
