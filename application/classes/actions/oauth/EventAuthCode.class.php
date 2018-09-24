@@ -9,6 +9,7 @@ use \League\OAuth2\Server\Exception\OAuthServerException;
 class ActionOauth_EventAuthCode extends Event {
     
     public function Init() {
+        $this->Logger_Debug('start');
         /*
          * Инициализируем сервер и тип гранта
          */
@@ -24,6 +25,7 @@ class ActionOauth_EventAuthCode extends Event {
                 ]
             )
         );
+        $this->Logger_Debug(json_encode($this->oRequest->getQueryParams()));
        
     }        
     
@@ -45,16 +47,19 @@ class ActionOauth_EventAuthCode extends Event {
                 /*
                  * Если нет запускаем новую авторизацию
                  */
+                $this->Logger_Debug('No sAuthRequest in session go validateAuthorizationRequest');
                 $this->oAuthRequest = $this->oServer->validateAuthorizationRequest($this->oRequest);
             }else{
                 $this->oAuthRequest = unserialize($sAuthRequest);
                 /*
                  * Если state передан и  иной чем в сессии обновляем AuthRequest
                  */
-                
+                $this->Logger_Debug('Find sAuthRequest in session:'.$sAuthRequest);
                 if(getRequest('state', $this->Session_Get('state')) != $this->oAuthRequest->getState()){
+                    $this->Logger_Debug('Find state(query:'.getRequest('state').', sess:'.$this->Session_Get('state').') and state no match:'.$this->oAuthRequest->getState());
                     $this->Session_Drop('oAuthRequest');
                     $this->Session_Drop('state');
+                    $this->Logger_Debug('Drop sAuthRequest and go validateAuthorizationRequest');
                     $this->oAuthRequest = $this->oServer->validateAuthorizationRequest($this->oRequest);
                 }
             }
@@ -62,11 +67,12 @@ class ActionOauth_EventAuthCode extends Event {
              * Устанавливаем redirect_uri чтобы не был обязательным в запросе
              */
             $this->oAuthRequest->setRedirectUri(getRequest('redirect_uri', $this->oAuthRequest->getClient()->getRedirectUri()));
+            $this->Logger_Debug('setRedirectUri:'.$this->oAuthRequest->getRedirectUri());
             /*
              * Устанавливаем state если пуст
              */ 
             if(!$this->oAuthRequest->getState()){
-               
+                
                 $aScopes = [];
                 foreach($this->oAuthRequest->getScopes() as $eScope){
                     $aScopes[] = $eScope->getIdentifier();
@@ -76,11 +82,11 @@ class ActionOauth_EventAuthCode extends Event {
                     $this->oAuthRequest->getClient()->getIdentifier(),
                     join(',', $aScopes)
                 );
-                
+                $this->Logger_Debug('setState:'.$this->oAuthRequest->getState());
                 $this->oAuthRequest->setState( $sState );
             }
             
-            
+            $this->Logger_Debug('setState in sess:'.$this->oAuthRequest->getState());
             $this->Session_Set('state', $this->oAuthRequest->getState());
             
             /*
@@ -90,14 +96,19 @@ class ActionOauth_EventAuthCode extends Event {
                 /*
                  * Конвертируем пользователя
                  */
+                
                 $eUser = $this->Oauth_GetUserEntity( $this->User_GetUserCurrent() );
                 $this->oAuthRequest->setUser($eUser);
+                $this->Logger_Debug('User Is Authorization true, setUser:'. json_decode($eUser));
                 $this->Session_Set($this->sAuthRequestKey, serialize($this->oAuthRequest));
+                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_decode($this->oAuthRequest));
             }else{
                 $this->Session_Set($this->sAuthRequestKey, serialize($this->oAuthRequest));
+                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_decode($this->oAuthRequest));
                 /*
                  * Отправляем на авторизацию
                  */
+                $this->Logger_Debug('Go to auth:'.Router::GetPath('auth'). '?' . $sQuery);
                 Router::Location(Router::GetPath('auth'). '?' . $sQuery);
             }
             
@@ -107,6 +118,8 @@ class ActionOauth_EventAuthCode extends Event {
                  * Проверка подтверждал ли пользователь запрашиваемые скоупы для этого приложения
                  * если да то setAuthorizationApproved(true)
                  */
+                $this->Logger_Debug('User not approve app');
+                $this->Logger_Debug('Try AuthCodeExists');
                 if(!$this->AuthCodeExists()){
                     /*
                     * Отправляем на проверку приложения и прав
@@ -117,6 +130,7 @@ class ActionOauth_EventAuthCode extends Event {
             /*
              * Отправка кода
              */
+            $this->Logger_Debug('isAuthorizationApproved = true, Response code');
             $this->Session_Drop('oAuthRequest');
             $this->Session_Drop('state');
                   
@@ -129,6 +143,7 @@ class ActionOauth_EventAuthCode extends Event {
             if(!is_array($aLocation) and !count($aLocation)){
                 throw OAuthServerException::serverError("Unknown error");
             }
+            $this->Logger_Debug(json_encode($aLocation));
             
             Router::Location(array_shift($aLocation));
             
@@ -147,6 +162,7 @@ class ActionOauth_EventAuthCode extends Event {
         * Отменяем восстановление кода
         */
         if(!Config::Get('module.oauth.fast_auth_code')){
+            $this->Logger_Debug('AuthCodeExists disable in config');
            return false;
         }
         
@@ -186,11 +202,15 @@ class ActionOauth_EventAuthCode extends Event {
         $oClient = $this->oAuthRequest->getClient();
         
         if(($oAuthCode or $oAccessToken) and $oClient){
+            $this->Logger_Debug('Find AuthCodeExists:'. json_encode($oAccessToken));
+            $this->Logger_Debug('Find oAccessToken:'. json_encode($oAccessToken));
             /*
              * Удаляем старый код, так как все равно создастся новый
              */
             $oAuthCode->Delete();
+            $this->Logger_Debug('setScopes:'. json_encode($aScopesApprove));
             $this->oAuthRequest->setScopes($aScopesApprove); 
+            $this->Logger_Debug('setAuthorizationApproved: true');
             $this->oAuthRequest->setAuthorizationApproved(true);
             return true;
         }
