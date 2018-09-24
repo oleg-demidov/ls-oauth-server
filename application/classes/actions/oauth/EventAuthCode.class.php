@@ -82,8 +82,9 @@ class ActionOauth_EventAuthCode extends Event {
                     $this->oAuthRequest->getClient()->getIdentifier(),
                     join(',', $aScopes)
                 );
-                $this->Logger_Debug('setState:'.$this->oAuthRequest->getState());
+                
                 $this->oAuthRequest->setState( $sState );
+                $this->Logger_Debug('State no  find. setState:'.$this->oAuthRequest->getState());
             }
             
             $this->Logger_Debug('setState in sess:'.$this->oAuthRequest->getState());
@@ -99,12 +100,12 @@ class ActionOauth_EventAuthCode extends Event {
                 
                 $eUser = $this->Oauth_GetUserEntity( $this->User_GetUserCurrent() );
                 $this->oAuthRequest->setUser($eUser);
-                $this->Logger_Debug('User Is Authorization true, setUser:'. json_decode($eUser));
+                $this->Logger_Debug('User Is Authorization true, setUser:'. json_encode($eUser));
                 $this->Session_Set($this->sAuthRequestKey, serialize($this->oAuthRequest));
-                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_decode($this->oAuthRequest));
+                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_encode($this->oAuthRequest));
             }else{
                 $this->Session_Set($this->sAuthRequestKey, serialize($this->oAuthRequest));
-                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_decode($this->oAuthRequest));
+                $this->Logger_Debug('Set oAuthRequest in sess:'.$this->sAuthRequestKey.' '. json_encode($this->oAuthRequest));
                 /*
                  * Отправляем на авторизацию
                  */
