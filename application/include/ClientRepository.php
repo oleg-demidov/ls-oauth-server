@@ -22,8 +22,7 @@ class ClientRepository implements ClientRepositoryInterface {
 
         if(!$oClient){
             return false;
-        }        
-        
+        }       
         /*
          * Проверяем секрет клиента если нужно
          */
@@ -32,6 +31,12 @@ class ClientRepository implements ClientRepositoryInterface {
             if($oClient->getSecret() != $clientSecret){
                 return false;
             }
+        }        
+        /*
+         * Заполняем redirect если пуст
+         */
+        if(!$oClient->getRedirectUri()){
+            $oClient->setRedirectUri(getRequest('redirect_uri'));
         }
         
         return $oClient;

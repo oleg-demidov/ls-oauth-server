@@ -59,10 +59,6 @@ class ActionOauth_EventAuthCode extends Event {
                 }
             }
             /*
-             * Устанавливаем redirect_uri чтобы не был обязательным в запросе
-             */
-            $this->oAuthRequest->setRedirectUri(getRequest('redirect_uri', $this->oAuthRequest->getClient()->getRedirectUri()));
-            /*
              * Устанавливаем state если пуст
              */ 
             if(!$this->oAuthRequest->getState()){

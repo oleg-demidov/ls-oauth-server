@@ -51,6 +51,22 @@ class ModuleOauth extends ModuleORM
         return $oServer;
     }
     
+    public function GetResourceServer() {
+        // Init our repositories
+        $accessTokenRepository = new AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
+
+        // Path to authorization server's public key
+        $publicKeyPath = $this->GetPublicKeyPath();
+
+        // Setup the authorization server
+        $server = new \League\OAuth2\Server\ResourceServer(
+            $accessTokenRepository,
+            $publicKeyPath
+        );
+        
+        return $server;
+    }
+    
     public function EnableGrantType($oServer, $sGrantType) {
         
         if($sGrantType == 'access_token' or $sGrantType == 'authorization_code'){
@@ -103,6 +119,10 @@ class ModuleOauth extends ModuleORM
     
     public function GetPrivateKeyPath() {        
         return Config::Get('path.root.server').'/keys/private.key';
+    }
+    
+    public function GetPublicKeyPath() {        
+        return Config::Get('path.root.server').'/keys/public.key';
     }
     
     public function GetEncryptionKey() {

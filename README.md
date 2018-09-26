@@ -9,7 +9,11 @@
 4. Дать права на запись для каталогов: ``/uploads/``, ``/application/logs/``, ``/application/tmp/``
 5. Запустить ``composer install``
 6. Сгенерировать ключи `openssl genrsa -out keys/private.key 2048`, `openssl rsa -in keys/private.key -pubout -out keys/public.key`, `vendor/bin/generate-defuse-key > keys/encryption.key`
-7. Возможно в вашей версии PHP потребуется поправить файл библиотеки oauth2-server `/vendor/league/oauth2-server/src/Grant/AbstractGrant.php`  в строке 216. Убрать необязательный тип string.
+7. Поставить права 600 или 660 на ключи pivate.key и public.key
+
+
+--- Возможно в вашей версии PHP потребуется поправить файл библиотеки oauth2-server(7.2.0) `/vendor/league/oauth2-server/src/Grant/AbstractGrant.php`  в строке 216. Убрать необязательный тип string. 
+
 ### Использование
 Смотреть документацию https://oauth2.thephpleague.com/authorization-server/auth-code-grant/
 Сервер авторизации имеет адреса:
