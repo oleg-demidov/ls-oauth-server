@@ -38,7 +38,9 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
             'code' => $codeId
         ]);
         
-        $oAuthCode->Delete();
+        if($oAuthCode){
+            $oAuthCode->Delete();
+        }
     }
 
 }

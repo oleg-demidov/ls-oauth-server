@@ -19,6 +19,9 @@ class ScopeRepository implements ScopeRepositoryInterface {
     public function getScopeEntityByIdentifier($identifier) {
         
         $oScope = Engine::getInstance()->Oauth_GetScopeByIdentifier($identifier);
+        if(!$identifier){
+            $oScope = Engine::GetEntity('Oauth_Scope');
+        }
         
         return $oScope;
     }

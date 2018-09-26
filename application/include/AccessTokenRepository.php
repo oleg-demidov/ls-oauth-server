@@ -43,7 +43,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
             'token' => $tokenId
         ]);
         
-        $oAccessToken->Delete();
+        if($oAccessToken){
+            $oAccessToken->Delete();
+        }
     }
 
 }

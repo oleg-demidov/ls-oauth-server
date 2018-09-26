@@ -36,9 +36,12 @@ class ModuleOauth_EntityAccessToken extends EntityORM implements AccessTokenEnti
     }
 
     public function getScopes() {
-        return $this->Oauth_GetScopeItemsByFilter([
-            'identifier in' => parent::getScopes()
-        ]);
+        if(is_array(parent::getScopes())){
+            return $this->Oauth_GetScopeItemsByFilter([
+                'identifier in' => array_merge(parent::getScopes(),['0'])
+            ]); 
+        }
+        return [];
     }
 
     public function getUserIdentifier() {

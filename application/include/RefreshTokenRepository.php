@@ -36,7 +36,9 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
             'token' => $tokenId
         ]);
         
-        $oRefreshToken->Delete();
+        if($oRefreshToken){
+            $oRefreshToken->Delete();
+        }
     }
 
 }
