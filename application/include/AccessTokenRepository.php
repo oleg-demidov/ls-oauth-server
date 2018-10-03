@@ -33,7 +33,6 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     }
 
     public function persistNewAccessToken(AccessTokenEntityInterface $oAccessToken) {
-        
         $oAccessToken->Save();
         
     }

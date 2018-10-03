@@ -59,6 +59,12 @@ class ActionOauth_EventAuthCode extends Event {
                 }
             }
             /*
+             * Устанавливаем redirect_uri если пуст
+             */
+            if(!getRequest('redirect_uri')){
+                $this->oAuthRequest->setRedirectUri($this->oAuthRequest->getClient()->getRedirectUri());
+            }
+            /*
              * Устанавливаем state если пуст
              */ 
             if(!$this->oAuthRequest->getState()){
@@ -162,13 +168,16 @@ class ActionOauth_EventAuthCode extends Event {
                 $aScopesRequested[] = $oScope->getId();
             }
         }
-        $aScopesApprove = $this->Oauth_GetScopeItemsByFilter([
+        $FilterScope = [
             'id in' => $aScopesRequested,
             '#where' => [
                 '1=1 or t.requested = ?d' => [0]
             ],
             '#index-from' => 'identifier'
-        ]);               
+        ];
+        
+        $aScopesApprove = $this->Oauth_GetScopeItemsByFilter($FilterScope);               
+        
         
         if(count(array_keys($aScopesApprove))){
             $aFilter['scopes'] = json_encode(array_keys($aScopesApprove));
@@ -181,11 +190,22 @@ class ActionOauth_EventAuthCode extends Event {
         
         $oClient = $this->oAuthRequest->getClient();
         
-        if(($oAuthCode or $oAccessToken) and $oClient){
+        if(!$oClient){
+            return false;
+        }
+        if($oAuthCode){
             /*
              * Удаляем старый код, так как все равно создастся новый
              */
             $oAuthCode->Delete();
+            $this->oAuthRequest->setScopes($aScopesApprove); 
+            $this->oAuthRequest->setAuthorizationApproved(true);
+            return true;
+        }
+        if($oAccessToken){
+            /*
+             * Найден токен с запрашиваемыми скопами
+             */
             $this->oAuthRequest->setScopes($aScopesApprove); 
             $this->oAuthRequest->setAuthorizationApproved(true);
             return true;

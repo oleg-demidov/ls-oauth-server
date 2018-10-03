@@ -26,7 +26,9 @@ class ModuleOauth_EntityAuthCode extends EntityORM implements AuthCodeEntityInte
         if(!isset($this->_aData['scopes'])){
             $this->_aData['scopes'] = [];
         }
-        $this->_aData['scopes'][] = $scope->getIdentifier();
+        if(!in_array($scope->getIdentifier(), $this->_aData['scopes'])){
+            $this->_aData['scopes'][] = $scope->getIdentifier();
+        }
     }
 
     public function getClient(){

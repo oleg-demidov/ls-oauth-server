@@ -78,7 +78,7 @@ $config['module']['notify']['prefix']        = 'email';  // Префикс ша�
 $config['module']['oauth']['auth_code']['expire']   = 'PT10H';    // authorization codes will expire after DateInterval
 $config['module']['oauth']['refresh_token']['expire']   = 'P1M';    // refresh tokens will expire after DateInterval
 $config['module']['oauth']['access_token']['expire']   = 'PT1H';    // Access tokens will expire after DateInterval
-$config['module']['oauth']['fast_auth_code']  = false;          //Быстрое восстановление кода
+$config['module']['oauth']['fast_auth_code']  = true;          //Быстрое восстановление кода
 
 
 // Модуль Security

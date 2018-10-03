@@ -8,5 +8,5 @@
 /.idea/
 /nbproject
 /vendor
-
 /keys/*
+composer.lock

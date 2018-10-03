@@ -20,7 +20,9 @@ class ModuleOauth_EntityAccessToken extends EntityORM implements AccessTokenEnti
         if(!isset($this->_aData['scopes'])){
             $this->_aData['scopes'] = [];
         }
-        $this->_aData['scopes'][] = $oScope->getIdentifier();
+        if(!in_array($oScope->getIdentifier(), $this->_aData['scopes'])){
+            $this->_aData['scopes'][] = $oScope->getIdentifier();
+        }
     }
 
     public function getClient() {
@@ -49,7 +51,8 @@ class ModuleOauth_EntityAccessToken extends EntityORM implements AccessTokenEnti
     }
 
     public function setClient(ClientEntityInterface $client) {
-        parent::setClient($client);
+        parent::setClient($client);     
+        parent::setClientId($client->getIdentifier());
     }
 
     public function setExpiryDateTime(\DateTime $dateTime) {
