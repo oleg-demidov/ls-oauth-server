@@ -1,0 +1,1 @@
+ALTER TABLE `prefix_client` ADD `extra_approve` TINYINT NULL DEFAULT '0' AFTER `secret`;

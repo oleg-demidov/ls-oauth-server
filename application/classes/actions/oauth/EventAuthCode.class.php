@@ -152,12 +152,6 @@ class ActionOauth_EventAuthCode extends Event {
            return false;
         }
         
-        $aFilter = [
-            'user_id' => $this->oAuthRequest->getUser()->getIdentifier(),
-            'client_id'=> $this->oAuthRequest->getClient()->getIdentifier(),
-            '#where' => ['t.expiry > ?'    => [(new DateTime)->format("Y-m-d H:i:s")]]
-        ];
-        
         $aScopes = $this->oAuthRequest->getScopes();
         /*
          * Выбираем скоупы с необходимостью подтверждения из тех что запрошены
@@ -176,8 +170,21 @@ class ActionOauth_EventAuthCode extends Event {
             '#index-from' => 'identifier'
         ];
         
-        $aScopesApprove = $this->Oauth_GetScopeItemsByFilter($FilterScope);               
+        $aScopesApprove = $this->Oauth_GetScopeItemsByFilter($FilterScope);    
+        /*
+         * Если клиент с особыми правами пропускаем approve
+         */
+        if($this->oAuthRequest->getClient()->getExtraApprove()){
+            $this->oAuthRequest->setScopes($aScopesApprove); 
+            $this->oAuthRequest->setAuthorizationApproved(true);
+            return true;
+        }
         
+        $aFilter = [
+            'user_id' => $this->oAuthRequest->getUser()->getIdentifier(),
+            'client_id'=> $this->oAuthRequest->getClient()->getIdentifier(),
+            '#where' => ['t.expiry > ?'    => [(new DateTime)->format("Y-m-d H:i:s")]]
+        ];
         
         if(count(array_keys($aScopesApprove))){
             $aFilter['scopes'] = json_encode(array_keys($aScopesApprove));
@@ -188,11 +195,7 @@ class ActionOauth_EventAuthCode extends Event {
         $oAuthCode = $this->Oauth_GetAuthCodeByFilter($aFilter);
         $oAccessToken = $this->Oauth_GetAccessTokenByFilter($aFilter);
         
-        $oClient = $this->oAuthRequest->getClient();
         
-        if(!$oClient){
-            return false;
-        }
         if($oAuthCode){
             /*
              * Удаляем старый код, так как все равно создастся новый
