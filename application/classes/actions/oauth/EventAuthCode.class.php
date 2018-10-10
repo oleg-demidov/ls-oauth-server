@@ -145,12 +145,6 @@ class ActionOauth_EventAuthCode extends Event {
     
     
     public function AuthCodeExists() {
-        /*
-        * Отменяем восстановление кода
-        */
-        if(!Config::Get('module.oauth.fast_auth_code')){
-           return false;
-        }
         
         $aScopes = $this->oAuthRequest->getScopes();
         /*
@@ -178,6 +172,12 @@ class ActionOauth_EventAuthCode extends Event {
             $this->oAuthRequest->setScopes($aScopesApprove); 
             $this->oAuthRequest->setAuthorizationApproved(true);
             return true;
+        }
+        /*
+        * Отменяем восстановление кода
+        */
+        if(!Config::Get('module.oauth.fast_auth_code')){
+           return false;
         }
         
         $aFilter = [
